@@ -1,6 +1,6 @@
 # GAN image synthesis
 
-An implementation of a Generative Adversarial Network (GAN) for image synthesis. The code is organized into a single Python script that defines the training loop and the GAN's generator and discriminator models. The GAN is trained to generate high-resolution images based on a given dataset of real images.
+An implementation of a Generative Adversarial Network (GAN) for image synthesis. The code is organized into a single Python script that defines the training loop and the GAN's generator and discriminator models. The GAN is trained to generate high-resolution images based on a given dataset of real images. 
 
 The following sections provide an in-depth technical overview of the GAN's components and their functionality.
 
@@ -20,6 +20,10 @@ Both the generator and the discriminator are trained using the binary cross-entr
 During training, the generator and the discriminator are updated alternately. First, the discriminator is updated by minimizing the loss with respect to real images and generated images. Then, the generator is updated by minimizing its loss, which corresponds to maximizing the probability of the discriminator being deceived by the generated images.
 
 Gradient accumulation is employed to reduce memory consumption during training. The gradients are accumulated over a specified number of steps (accumulation_steps) before updating the model parameters.
+
+When training a GAN, it is generally not recommended to use less than 100 epochs to start, as it is important to provide sufficient time for the discriminator and the generator to "duke it out" and learn from each other. In the early stages of training, both the discriminator and the generator are relatively untrained, and their performance is likely to be suboptimal. As they engage in an adversarial process, they iteratively improve by learning from each other's mistakes.
+
+Choosing a low number of epochs, such as less than 100, may not allow the GAN enough time to reach a state where the generator is producing realistic outputs and the discriminator is effectively differentiating between real and fake data. The process of reaching this equilibrium often requires a substantial number of epochs, and prematurely stopping the training can lead to suboptimal results, such as the generator producing low-quality outputs or the discriminator failing to distinguish between real and generated samples. Therefore, it is wise to start with a higher number of epochs to provide the GAN ample opportunity to learn and adapt during the training process.
 
 # Training Data and Image Preprocessing
 The GAN is trained on a dataset of images organized in a folder structure compatible with the ImageFolder class from the PyTorch torchvision library. The images are preprocessed using a series of transformations, including resizing, center cropping, converting to tensors, and normalization.
