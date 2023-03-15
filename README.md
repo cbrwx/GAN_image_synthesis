@@ -77,17 +77,17 @@ This will train the GAN on the specified dataset for 200 epochs, with a batch si
 # Training Metrics and Interpretation
 Key metrics reported during the training process and their interpretation to help users understand the performance of the GAN. 
 ```
- Loss_D: This is the current loss value for the discriminator (D). The loss is a measure of how 
-         well the discriminator can distinguish between real and fake images. Lower values indicate 
-         better performance.
+  Loss_D: This is the current loss value for the discriminator (D). The loss is a measure of how 
+          well the discriminator can distinguish between real and fake images. Lower values indicate 
+          better performance.
 
- Loss_G: This is the current loss value for the generator (G). The loss is a measure of how well the 
-         generator can deceive the discriminator by generating realistic images. Lower values indicate 
-         better performance.
+  Loss_G: This is the current loss value for the generator (G). The loss is a measure of how well the 
+          generator can deceive the discriminator by generating realistic images. Lower values indicate 
+          better performance.
 
- D(x): This is the average output of the discriminator for real images. It represents the probability 
-       that the discriminator assigns to real images being real. Ideally, this value should be close 
-       to 1, indicating that the discriminator correctly identifies real images.
+    D(x): This is the average output of the discriminator for real images. It represents the probability 
+          that the discriminator assigns to real images being real. Ideally, this value should be close 
+          to 1, indicating that the discriminator correctly identifies real images.
 
  D(G(z)): These are the average outputs of the discriminator for fake images before and after updating 
           the generator. The first value is calculated before the generator is updated, and the second 
