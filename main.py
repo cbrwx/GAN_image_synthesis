@@ -6,22 +6,25 @@ from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
 import torchvision.utils as vutils
 import matplotlib.pyplot as plt
+from IPython.display import clear_output
 
+# Set up the save checkpoint function
 def save_checkpoint(state, is_best, filename):
     torch.save(state, filename)
     if is_best:
         shutil.copyfile(filename, f'{os.path.dirname(filename)}/best_model.pth')
 
-# Set values - make sure to check all paths in the code!
-checkpoint_dir = 'checkpoint/path'
-model_dir = 'model/path'
+# Set values
+checkpoint_dir = 'your/checkpoint/'
+model_dir = 'your/model/dir'
 if not os.path.exists(checkpoint_dir):
     os.makedirs(checkpoint_dir)
 image_size = 1024
 batch_size = 32 # Adjust to fit your GPU(s) mem
-num_epochs = 100
+num_epochs = 200
+start_epoch = 0 # Checkpoint if
 
-start_epoch = 0
+# Load checkpoint
 if os.path.isfile(os.path.join(checkpoint_dir, 'checkpoint.pth')):
     print("=> Loading checkpoint")
     checkpoint = torch.load(os.path.join(checkpoint_dir, 'checkpoint.pth'))
@@ -48,6 +51,30 @@ dataset = datasets.ImageFolder(
 )
 
 dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
+# Define Battle status bars
+def print_battle_status(G_loss, D_loss, G_loss_history, D_loss_history, max_bar_length=30):
+    G_loss_history.append(G_loss)
+    D_loss_history.append(D_loss)
+
+    G_bar_length = round((G_loss / (G_loss + D_loss)) * max_bar_length)  # Use round() function
+    D_bar_length = max_bar_length - G_bar_length
+
+    G_bar = "\033[1;42m" + " " * G_bar_length + "\033[0m"  # Green background for generator
+    D_bar = "\033[1;41m" + " " * D_bar_length + "\033[0m"  # Red background for discriminator
+
+    # Bold yellow text for the newest losses
+    G_loss_text = f"\033[1;33m{G_loss:.4f}\033[0m"
+    D_loss_text = f"\033[1;33m{D_loss:.4f}\033[0m"
+
+    # Print the performance indicator with colored background and bold yellow text for the newest value
+    print("")
+    print("[Performance strength indicator]                  [Historical steps]")
+    print(f"    Generator: [{G_bar:<{max_bar_length}}] {G_loss_text}", end="")
+    print("".join([f"\033[38;5;{240}m {G_loss_history[-(i + 2):][0]:.4f}\033[0m" for i in range(min(5, len(G_loss_history) - 1))]))
+
+    print(f"Discriminator: [{D_bar:<{max_bar_length}}] {D_loss_text}", end="")
+    print("".join([f"\033[38;5;{240}m {D_loss_history[-(i + 2):][0]:.4f}\033[0m" for i in range(min(5, len(D_loss_history) - 1))]))
 
 def weights_init(m):
     classname = m.__class__.__name__
@@ -147,11 +174,15 @@ dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle
 
 # Train the GAN
 fixed_noise = torch.randn(batch_size, nz, 1, 1, device=device)
+
 accumulation_steps = 4  # Number of gradient accumulation steps
+generator_accumulation_steps = 8
 
 # Initialize lists to store the losses
 G_losses = []
 D_losses = []
+G_loss_history = [] # Add this line to initialize G_loss_history
+D_loss_history = [] # Add this line to initialize D_loss_history
 
 for epoch in range(start_epoch, num_epochs):
     for i, (real_images, _) in enumerate(dataloader):
@@ -186,7 +217,7 @@ for epoch in range(start_epoch, num_epochs):
         errG.backward()
         D_G_z2 = output.mean().item()
 
-        if (i + 1) % accumulation_steps == 0:
+        if (i + 1) % generator_accumulation_steps  == 0:
             optimizerG.step()
 
         # Append the losses to their lists
@@ -194,12 +225,14 @@ for epoch in range(start_epoch, num_epochs):
         D_losses.append(errD.item())
 
         # Print loss and save images
-        if i % 10 == 0: # Decrease for more frequent updates to the print output
+        if i % 1 == 0: # Decrease for more frequent updates to the print output
+            clear_output(wait=True)  # Add this line to clear the output cell
             print('[%d/%d][%d/%d]\tLoss_D: %.4f\tLoss_G: %.4f\tD(x): %.4f\tD(G(z)): %.4f / %.4f'
                   % (epoch+1, num_epochs, i+1, len(dataloader), errD.item(), errG.item(), D_x, D_G_z1, D_G_z2))
-            vutils.save_image(real_images, '%s/real_samples.png' % '/your/real/generated/sample/folder', normalize=True)
+            print_battle_status(errG.item(), errD.item(), G_loss_history, D_loss_history) # Add the missing arguments
+            vutils.save_image(real_images, '%s/real_samples.png' % 'your/generated/real/image/dir', normalize=True)
             fake_images = G(fixed_noise)
-            vutils.save_image(fake_images.detach(), '%s/fake_samples_epoch_%03d.png' % ('your/fake/pic/folder/', epoch+1), normalize=True)
+            vutils.save_image(fake_images.detach(), '%s/fake_samples_epoch_%03d.png' % ('your/fake/generated/image/dir', epoch+1), normalize=True)
 
     # Save a checkpoint every 10 epochs
     if (epoch + 1) % 10 == 0:
@@ -220,4 +253,3 @@ plt.xlabel("Iterations")
 plt.ylabel("Loss")
 plt.legend()
 plt.show()
-
