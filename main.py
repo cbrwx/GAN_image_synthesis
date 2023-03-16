@@ -110,7 +110,6 @@ class Discriminator(nn.Module):
     def forward(self, input):
         return self.main(input)
 
-
 # Set up the models and training parameters
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Set up the models and training parameters
@@ -120,9 +119,6 @@ ndf = 64 # Size of feature maps in discriminator
 nc = 3 # Number of channels in the input images
 lr = 0.0002 # Learning rate
 beta1 = 0.5 # Beta1 for Adam optimizer
-
-# Set up the models and training parameters
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 D = Discriminator(ndf, nc)
 D.apply(weights_init)
