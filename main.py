@@ -182,8 +182,8 @@ generator_accumulation_steps = 8
 # Initialize lists to store the losses
 G_losses = []
 D_losses = []
-G_loss_history = [] # Add this line to initialize G_loss_history
-D_loss_history = [] # Add this line to initialize D_loss_history
+G_loss_history = [] 
+D_loss_history = [] 
 
 for epoch in range(start_epoch, num_epochs):
     for i, (real_images, _) in enumerate(dataloader):
@@ -227,7 +227,7 @@ for epoch in range(start_epoch, num_epochs):
 
         # Print loss and save images
         if i % 1 == 0: # Decrease for more frequent updates to the print output
-            clear_output(wait=True)  # Add this line to clear the output cell
+            clear_output(wait=True) 
             print('[%d/%d][%d/%d]\tLoss_D: %.4f\tLoss_G: %.4f\tD(x): %.4f\tD(G(z)): %.4f / %.4f'
                   % (epoch+1, num_epochs, i+1, len(dataloader), errD.item(), errG.item(), D_x, D_G_z1, D_G_z2))
             print_battle_status(errG.item(), errD.item(), G_loss_history, D_loss_history) # Add the missing arguments
