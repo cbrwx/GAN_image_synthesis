@@ -41,13 +41,13 @@ The quality of the generated images can be visually assessed by examining the sa
 # Hyperparameters
 The training script allows users to customize various hyperparameters, including:
 
-batch_size: The number of images processed in each training iteration.
-epochs: The total number of times the training loop iterates over the entire dataset.
-learning_rate: The learning rate used for both the generator and discriminator optimizers.
-beta1 and beta2: The coefficients for the Adam optimizer's moving average of the gradient and the squared gradient, respectively.
-latent_dim: The size of the latent vector z, which is the input to the generator.
-accumulation_steps: The number of gradient accumulation steps before updating the model parameters.
-image_size: The dimensions (height and width) of the images used for training.
+- batch_size: The number of images processed in each training iteration.
+- epochs: The total number of times the training loop iterates over the entire dataset.
+- learning_rate: The learning rate used for both the generator and discriminator optimizers.
+- beta1 and beta2: The coefficients for the Adam optimizer's moving average of the gradient and the squared gradient, respectively.
+- latent_dim: The size of the latent vector z, which is the input to the generator.
+- accumulation_steps: The number of gradient accumulation steps before updating the model parameters.
+- image_size: The dimensions (height and width) of the images used for training.
 These hyperparameters can be adjusted to optimize the performance of the GAN for different datasets and hardware configurations.
 
 # Dependencies and Installation
