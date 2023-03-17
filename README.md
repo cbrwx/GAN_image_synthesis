@@ -74,7 +74,7 @@ data/
 ```
 Then, run the training script with the following command:
 ```
-python train.py --data_path data/dataset_name --epochs 200 --batch_size 64 --learning_rate 0.0002 --image_size 64
+python train.py --data_path data/dataset_name --epochs 200 --batch_size 64 --lr_g 0.0002 --lr_d 0.0001 --image_size 64
 ```
 This will train the GAN on the specified dataset for 200 epochs, with a batch size of 64, learning rate of 0.0002, and image size of 64x64 pixels. Adjust the hyperparameters as necessary for your specific dataset and hardware configuration.
 
