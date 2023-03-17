@@ -25,19 +25,6 @@ batch_size = 32 # Adjust to fit your GPU(s) mem
 num_epochs = 200
 start_epoch = 0 # Checkpoint if
 
-# Load checkpoint
-if os.path.isfile(os.path.join(checkpoint_dir, 'checkpoint.pth')):
-    print("=> Loading checkpoint")
-    checkpoint = torch.load(os.path.join(checkpoint_dir, 'checkpoint.pth'))
-    start_epoch = checkpoint['epoch']
-    D.load_state_dict(checkpoint['D_state_dict'])
-    G.load_state_dict(checkpoint['G_state_dict'])
-    optimizerD.load_state_dict(checkpoint['optimizerD_state_dict'])
-    optimizerG.load_state_dict(checkpoint['optimizerG_state_dict'])
-    print(f"=> Loaded checkpoint (epoch {checkpoint['epoch']})")
-else:
-    print("=> No checkpoint found, starting from scratch")
-
 # Set up the training data
 data_transforms = transforms.Compose([
     transforms.Resize((image_size + 64, image_size + 64)),
@@ -164,6 +151,19 @@ if torch.cuda.device_count() > 1:
 G.to(device)
 
 optimizerG = optim.Adam(G.parameters(), lr=lr, betas=(beta1, 0.999))
+
+# Load checkpoint
+if os.path.isfile(os.path.join(checkpoint_dir, 'checkpoint.pth')):
+    print("=> Loading checkpoint")
+    checkpoint = torch.load(os.path.join(checkpoint_dir, 'checkpoint.pth'))
+    start_epoch = checkpoint['epoch']
+    D.load_state_dict(checkpoint['D_state_dict'])
+    G.load_state_dict(checkpoint['G_state_dict'])
+    optimizerD.load_state_dict(checkpoint['optimizerD_state_dict'])
+    optimizerG.load_state_dict(checkpoint['optimizerG_state_dict'])
+    print(f"=> Loaded checkpoint (epoch {checkpoint['epoch']})")
+else:
+    print("=> No checkpoint found, starting from scratch")
 
 # Set up the training data
 transforms = transforms.Compose([transforms.Resize(image_size),
