@@ -25,6 +25,10 @@ The main advantage of gradient accumulation is that it allows for training deep 
 
 Choosing a low number of epochs, such as less than 100, may not allow the GAN enough time to reach a state where the generator is producing realistic outputs and the discriminator is effectively differentiating between real and fake data. The process of reaching this equilibrium often requires a substantial number of epochs, and prematurely stopping the training can lead to suboptimal results, such as the generator producing low-quality outputs or the discriminator failing to distinguish between real and generated samples. Therefore, it is wise to start with a higher number of epochs to provide the GAN ample opportunity to learn and adapt during the training process.
 
+The ReduceLROnPlateau scheduler is imported and then two instances are created for both the discriminator (schedulerD) and generator (schedulerG). The parameters include the mode, factor, patience, and verbose settings. The mode is set to 'min', which means that the scheduler will reduce the learning rate when the monitored quantity (loss) stops decreasing. The factor determines the reduction in learning rate, and patience specifies the number of epochs to wait before reducing the learning rate.
+
+During the training loop, the scheduler is updated with the current loss values using schedulerD.step(errD.item()) and schedulerG.step(errG.item()). This allows the scheduler to monitor the losses and adjust the learning rates accordingly when necessary. By using the learning rate scheduler, the training process can benefit from better convergence and potentially improved results.
+
 # Training Data and Image Preprocessing
 The GAN is trained on a dataset of images organized in a folder structure compatible with the ImageFolder class from the PyTorch torchvision library. The images are preprocessed using a series of transformations, including resizing, center cropping, converting to tensors, and normalization.
 
