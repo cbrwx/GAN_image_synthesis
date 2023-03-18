@@ -164,8 +164,8 @@ G.to(device)
 optimizerG = optim.Adam(G.parameters(), lr=lr_g, betas=(beta1, 0.999))
 
 # Add schedulers for learning rate
-schedulerD = ReduceLROnPlateau(optimizerD, mode='min', factor=0.1, patience=25, verbose=True)
-schedulerG = ReduceLROnPlateau(optimizerG, mode='min', factor=0.1, patience=25, verbose=True)
+schedulerD = ReduceLROnPlateau(optimizerD, mode='min', factor=0.1, patience=15, verbose=True)
+schedulerG = ReduceLROnPlateau(optimizerG, mode='min', factor=0.1, patience=15, verbose=True)
 
 # Load checkpoint
 if os.path.isfile(os.path.join(checkpoint_dir, 'checkpoint.pth')):
