@@ -187,7 +187,7 @@ dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle
 fixed_noise = torch.randn(batch_size, nz, 1, 1, device=device)
 
 accumulation_steps = 16  # Number of gradient accumulation steps
-generator_accumulation_steps = 2
+generator_accumulation_steps = 16
 
 # Initialize lists to store the losses
 G_losses = []
