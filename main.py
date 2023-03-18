@@ -52,23 +52,21 @@ def print_battle_status(G_loss, D_loss, G_loss_history, D_loss_history, optimize
     G_loss_text = f"\033[1;33m{G_loss:.4f}\033[0m"
     D_loss_text = f"\033[1;33m{D_loss:.4f}\033[0m"
 
-    # Get the current learning rates for the generator and discriminator
     G_lr = optimizerG.param_groups[0]['lr']
     D_lr = optimizerD.param_groups[0]['lr']
 
-    # Check if the learning rates have changed and print a message
     if G_lr != prev_lrG:
         print(f"\033[1;36mGenerator learning rate changed from {prev_lrG:.6f} to {G_lr:.6f}\033[0m")
     if D_lr != prev_lrD:
         print(f"\033[1;36mDiscriminator learning rate changed from {prev_lrD:.6f} to {D_lr:.6f}\033[0m")
 
     print("")
-    print("[Performance strength indicator    ]        [                Historical steps]")
-    print(f"    Generator: [{G_bar:<{max_bar_length}}] {G_loss_text} LR: {G_lr:.6f}", end="")
-    print("".join([f"\033[38;5;{240}m {G_loss_history[-(i + 2):][0]:.4f}\033[0m" for i in range(min(5, len(G_loss_history) - 1))]))
+    print("[Performance strength indicator                                           Historical steps]")
+    G_loss_history_str = "".join([f"\033[38;5;{240}m {G_loss_history[-(i + 2):][0]:.4f}\033[0m" for i in range(min(5, len(G_loss_history) - 1))])
+    print(f"    Generator: {G_loss_text} LR: {G_lr:.6f} [{G_bar:<{max_bar_length}}]", G_loss_history_str)
 
-    print(f"Discriminator: [{D_bar:<{max_bar_length}}] {D_loss_text} LR: {D_lr:.6f}", end="")
-    print("".join([f"\033[38;5;{240}m {D_loss_history[-(i + 2):][0]:.4f}\033[0m" for i in range(min(5, len(D_loss_history) - 1))]))
+    D_loss_history_str = "".join([f"\033[38;5;{240}m {D_loss_history[-(i + 2):][0]:.4f}\033[0m" for i in range(min(5, len(D_loss_history) - 1))])
+    print(f"Discriminator: {D_loss_text} LR: {D_lr:.6f} [{D_bar:<{max_bar_length}}]", D_loss_history_str)
 
     return G_lr, D_lr
 
