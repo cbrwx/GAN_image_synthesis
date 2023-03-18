@@ -1,8 +1,5 @@
-import os
-import shutil
-import torch
-import torch.nn as nn
-import torch.optim as optim
+import os, shutil, torch, torchvision
+import torch.nn as nn, torch.optim as optim
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
 import torchvision.utils as vutils
