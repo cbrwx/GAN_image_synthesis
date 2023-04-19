@@ -107,7 +107,7 @@ Key metrics reported during the training process and their interpretation to hel
           0 before the generator update and close to 1 after the generator update, indicating that the 
           generator is improving at deceiving the discriminator.
 ```
-# Conclusion
+# Final thoughts...
 In this repository im trying to provide a comprehensive implementation of a Generative Adversarial Network for image synthesis. The code includes a training loop, custom generator and discriminator models, and various utilities for monitoring the training process and evaluating the performance of the GAN. Users can easily customize the code to train the GAN on their own datasets and adjust the hyperparameters to optimize the performance. 
 
 .cbrwx
